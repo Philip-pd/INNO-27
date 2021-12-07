@@ -10,12 +10,14 @@ public class PlayerLogic : MonoBehaviour
     float rechargepercent; //Add same thing for shooting cooldown should roughly be able to shoot once every 1-2 second(s) and get a new shot every 3-5
     int CD;
     public int Bullets { get; set; }
+    public HealthBar _healthbar;
 
 
     // Start is called before the first frame update
     void Start()
     {
         this.Bullets = 3;
+        _healthbar.setMaxHealth(HP);
     }
 
     // Update is called once per frame
@@ -38,7 +40,8 @@ public class PlayerLogic : MonoBehaviour
     }
     public void Damage()
     {
-        HP--;
+        HP -= 20;
+        _healthbar.SetHealth(HP);
         Debug.Log("HP:" + HP);
         if (HP <= 0)
         {

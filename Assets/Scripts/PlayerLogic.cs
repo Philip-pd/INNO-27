@@ -11,6 +11,7 @@ public class PlayerLogic : MonoBehaviour
     int CD;
     public int Bullets { get; set; }
     public HealthBar _healthbar;
+    public GameObject endScreen;
 
 
     // Start is called before the first frame update
@@ -48,6 +49,7 @@ public class PlayerLogic : MonoBehaviour
         if (HP <= 0)
         {
             Debug.Log("player dead");
+            endScreen.gameObject.SetActive(true);
         }
     }
 }

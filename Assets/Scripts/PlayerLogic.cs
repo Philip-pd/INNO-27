@@ -7,6 +7,8 @@ public class PlayerLogic : MonoBehaviour
     [SerializeField] public int HP;
     [SerializeField] float RechargeRate;
     [SerializeField] int CDinFrames;
+    public bool isHuman = false;
+    public int maxbullets;
     float rechargepercent; //Add same thing for shooting cooldown should roughly be able to shoot once every 1-2 second(s) and get a new shot every 3-5
     int CD;
     public int Bullets { get; set; }
@@ -17,16 +19,18 @@ public class PlayerLogic : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        this.Bullets = 3;
-        if(_healthbar)
+        this.Bullets = maxbullets;
+        if (_healthbar)
+        {
             _healthbar.setMaxHealth(HP);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
 
-        if (this.Bullets < 3)
+        if (this.Bullets < maxbullets)
         {
             rechargepercent += RechargeRate;
         }
@@ -34,7 +38,7 @@ public class PlayerLogic : MonoBehaviour
         if (rechargepercent >= 100)
         {
             rechargepercent = 0;
-            if (this.Bullets < 3)
+            if (this.Bullets < maxbullets)
             {
                 this.Bullets++;
             }

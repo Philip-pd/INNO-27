@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Healbox : MonoBehaviour
 {
+    //DISCONTINUED
     PlayerStats playerStats;
     GameObject light;
     void Start()

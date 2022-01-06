@@ -18,14 +18,14 @@ public class BulletLogic : MonoBehaviour
     float speed;
     Vector3 dire = new Vector3();
 
-    public void Setup(Vector3 dir, GameObject t)
+    public void Setup(Vector3 dir, GameObject enemy, GameObject _player)
     {
         //
         transform.eulerAngles = dir;
-        this.target = t;
+        this.target = enemy;
         this.bounces = this.maxbounce;
         dire = dir;
-        player = GameObject.FindGameObjectWithTag("Player");
+        player = _player;
     }
     void Start()
     {

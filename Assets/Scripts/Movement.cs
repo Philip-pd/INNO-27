@@ -5,24 +5,33 @@ using UnityEngine;
 public class Movement : MonoBehaviour
 {
     public CharacterController controller;
+    [SerializeField] public GameObject player;
+    [SerializeField] public float horizontalSpeed = 3.0F;
+    PlayerLogic playerscript;
     public float speed = 12f;
 
     //public float turnSmoothTime = 0.1f;
     //float turnSmoothVelocity;
+    void Start()
+    {
+        playerscript = player.GetComponent<PlayerLogic>();
+    }
     void Update()
     {
+        float angle = horizontalSpeed * Input.GetAxis("Mouse X");
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
-        Vector3 direction = new Vector3 (horizontal, 0f, vertical).normalized;
-
-
-
-        if (direction.magnitude >= 0.1f)
+        if (playerscript.isHuman == true)
         {
-            float targetangle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
-            /*float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetangle, ref turnSmoothVelocity, turnSmoothTime);
-            transform.rotation = Quaternion.Euler(0f, angle, 0f);*/
-            controller.Move(direction * speed * Time.deltaTime);
+            Vector3 direction = new Vector3(horizontal, 0f, vertical).normalized;
+            transform.Rotate(0, angle, 0);
+
+
+            if (direction.magnitude >= 0.1f)
+            {
+                float targetangle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+                controller.Move(direction * speed * Time.deltaTime);
+            }
         }
     }
 }

@@ -15,26 +15,27 @@ public class AIStateMachine : MonoBehaviour
     private States _state;
     public NavMeshAgent agent;
     public Transform player;
-    public LayerMask whatIsGround, whatIsPlayer;
+    [SerializeField] private LayerMask whatIsGround, whatIsPlayer, whatIsObstacle;
 
-    public Vector3 walkPoint;
-    bool walkPointSet;
-    public float walkPointRange;
+    private Vector3 walkPoint;
+    private bool walkPointSet;
+    [SerializeField]private float walkPointRange;
 
-    public float timeBetweenAttack;
+    [SerializeField]private float timeBetweenAttack;
 
-    public float sightRange, attackRange;
-    public bool playerInSightRange, playerInAttackRange;
+    [SerializeField] private float sightRange, attackRange;
+    private bool playerInSightRange, playerInAttackRange;
 
     public PlayerLogic playerLogic;
-    public bool startAttack = false;
+    private bool startAttack = false;
     [SerializeField] private Transform pfBullet;
-    [SerializeField] private GameObject Enemy;
+    private GameObject _enemy;
 
     private void Awake()
     {
         _state = States.Patroling;
         player = GameObject.Find("Player").transform;
+        _enemy = GameObject.Find("Player");
         agent = GetComponent<NavMeshAgent>();
         playerLogic = GetComponent<PlayerLogic>();
     }
@@ -46,19 +47,23 @@ public class AIStateMachine : MonoBehaviour
         if (walkPointSet)
             agent.SetDestination(walkPoint);
         Vector3 distanceToWalkPoint = transform.position - walkPoint;
-        if (distanceToWalkPoint.magnitude < 2f)
+        if (distanceToWalkPoint.magnitude < 3f)
             walkPointSet = false;
     }
 
     private void SearchWalkPoint()
     {
+        //Vector3 randDir = new Vector3(UnityEngine.Random.Range(-1f, 1f),0, UnityEngine.Random.Range(-1f, 1f)).normalized;
+        
         float randomZ = UnityEngine.Random.Range(-walkPointRange, walkPointRange);
         float randomX = UnityEngine.Random.Range(-walkPointRange, walkPointRange);
 
-        walkPoint = new Vector3(transform.position.x + randomX, transform.position.y + randomZ);
-
-        if (Physics.Raycast(walkPoint, -transform.up, 2f, whatIsGround))
-            walkPointSet = true;
+        walkPoint = new Vector3(randomX,transform.position.y, randomZ);
+        if (Physics.Raycast(walkPoint, -transform.up, 4f, whatIsGround) && !Physics.Raycast(walkPoint, transform.up, 10f, whatIsObstacle))
+        {
+            Debug.Log("found point");
+            walkPointSet = true; 
+        }
     }
 
     private void Chasing()
@@ -75,8 +80,8 @@ public class AIStateMachine : MonoBehaviour
             startAttack = true;
             Vector3 dir = new Vector3(1f, 0f, 0f);
             Transform bulletTransform = Instantiate(pfBullet, gameObject.transform.position + gameObject.transform.forward * 1.5f, Quaternion.identity);
-            bulletTransform.GetComponent<BulletLogic>().Setup(dir, Enemy, gameObject);
-            Invoke(nameof(ResetAttack), 2);
+            bulletTransform.GetComponent<BulletLogic>().Setup(dir, _enemy, gameObject);
+            Invoke(nameof(ResetAttack), timeBetweenAttack);
         }
     }
 
@@ -84,22 +89,36 @@ public class AIStateMachine : MonoBehaviour
     {
         startAttack = false;
     }
+
+    private bool CheckObstacleBetweenPlayers()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, Vector3.Normalize(transform.position - player.position) * -sightRange,out hit))
+        {
+            Debug.DrawRay(transform.position, Vector3.Normalize(transform.position - player.position) * -hit.distance, Color.red);
+            if (hit.collider.gameObject.CompareTag("Player"))
+            {
+                return true;
+            }
+            //Debug.Log("WAll in front");
+        }
+        return false;
+    }
     // Update is called once per frame
     void Update()
     {
         playerInSightRange = Physics.CheckSphere(transform.position,sightRange,whatIsPlayer);
-        playerInAttackRange = Physics.CheckSphere(transform.position,attackRange,whatIsPlayer);
-        //playerInSightRange = Physics.Raycast(transform.position,transform.position-player.position,sightRange,whatIsPlayer);
-        //playerInAttackRange = Physics.Raycast(transform.position,new Vector3(player.position.x,player.position.y),attackRange,whatIsPlayer);
-        //if (playerInSightRange)
-        //Debug.Log("player here");
+        playerInAttackRange = Physics.CheckSphere(transform.position,attackRange,whatIsPlayer);      
 
         switch (_state)
         {
             case States.Patroling:
                 Patroling();
                 if (playerInSightRange)
+                {
+                    walkPointSet = false;
                     _state = States.Chasing;
+                }
                 break;
             case States.Chasing:
                 Chasing();
@@ -109,6 +128,11 @@ public class AIStateMachine : MonoBehaviour
                     _state = States.Patroling;
                 break;
             case States.Attacking:
+                if (!CheckObstacleBetweenPlayers())
+                {
+                    _state = States.Chasing;
+                    break;
+                }
                 Attacking();
                 if (!playerInAttackRange)
                     _state = States.Chasing;

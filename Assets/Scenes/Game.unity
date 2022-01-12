@@ -348,7 +348,7 @@ MonoBehaviour:
   whatIsObstacle:
     serializedVersion: 2
     m_Bits: 256
-  walkPointRange: 5
+  walkPointRange: 20
   timeBetweenAttack: 1
   sightRange: 14
   attackRange: 10
@@ -1217,7 +1217,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8277770511279187654, guid: 7b893e3017781dd42a3e28b7a4790ded, type: 3}
       propertyPath: m_TranslationOffset.z
-      value: -11.780779
+      value: -13.049999
       objectReference: {fileID: 0}
     - target: {fileID: 8277770511304128875, guid: 7b893e3017781dd42a3e28b7a4790ded, type: 3}
       propertyPath: m_Name
@@ -1237,7 +1237,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8277770511304128877, guid: 7b893e3017781dd42a3e28b7a4790ded, type: 3}
       propertyPath: m_TranslationAtRest.z
-      value: -18.849247
+      value: -20.88
       objectReference: {fileID: 0}
     - target: {fileID: 8277770511304128879, guid: 7b893e3017781dd42a3e28b7a4790ded, type: 3}
       propertyPath: endScreen
@@ -1261,7 +1261,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8277770511304128882, guid: 7b893e3017781dd42a3e28b7a4790ded, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -18.849247
+      value: -20.88
       objectReference: {fileID: 0}
     - target: {fileID: 8277770511304128882, guid: 7b893e3017781dd42a3e28b7a4790ded, type: 3}
       propertyPath: m_LocalRotation.w
@@ -3907,6 +3907,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 8277770511279187654, guid: 7b893e3017781dd42a3e28b7a4790ded, type: 3}
+      propertyPath: m_TranslationOffset.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8277770511279187654, guid: 7b893e3017781dd42a3e28b7a4790ded, type: 3}
+      propertyPath: m_TranslationOffset.y
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8277770511279187654, guid: 7b893e3017781dd42a3e28b7a4790ded, type: 3}
+      propertyPath: m_TranslationOffset.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8277770511304128875, guid: 7b893e3017781dd42a3e28b7a4790ded, type: 3}
       propertyPath: m_Name
       value: Player
@@ -3914,6 +3926,18 @@ PrefabInstance:
     - target: {fileID: 8277770511304128875, guid: 7b893e3017781dd42a3e28b7a4790ded, type: 3}
       propertyPath: m_Layer
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8277770511304128877, guid: 7b893e3017781dd42a3e28b7a4790ded, type: 3}
+      propertyPath: m_TranslationAtRest.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8277770511304128877, guid: 7b893e3017781dd42a3e28b7a4790ded, type: 3}
+      propertyPath: m_TranslationAtRest.y
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8277770511304128877, guid: 7b893e3017781dd42a3e28b7a4790ded, type: 3}
+      propertyPath: m_TranslationAtRest.z
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8277770511304128879, guid: 7b893e3017781dd42a3e28b7a4790ded, type: 3}
       propertyPath: isHuman

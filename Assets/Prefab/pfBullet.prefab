@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3640516005282372536}
   - component: {fileID: -5107150056940198882}
   - component: {fileID: 4205996062657431792}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: pfBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -75,7 +75,7 @@ GameObject:
   - component: {fileID: 7413770476793278565}
   - component: {fileID: 7413770476793278564}
   - component: {fileID: 7413770476793278587}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}

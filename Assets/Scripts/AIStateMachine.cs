@@ -15,7 +15,7 @@ public class AIStateMachine : MonoBehaviour
     private States _state;
     public NavMeshAgent agent;
     public Transform player;
-    [SerializeField] private LayerMask whatIsGround, whatIsPlayer, whatIsObstacle;
+    [SerializeField] private LayerMask whatIsGround, whatIsPlayer, whatIsBullet, whatIsObstacle;
 
     private Vector3 walkPoint;
     private bool walkPointSet;
@@ -30,6 +30,7 @@ public class AIStateMachine : MonoBehaviour
     private bool startAttack = false;
     [SerializeField] private Transform pfBullet;
     private GameObject _enemy;
+    private bool aiChaseDownPlayer = false;
 
     private void Awake()
     {
@@ -61,7 +62,7 @@ public class AIStateMachine : MonoBehaviour
         walkPoint = new Vector3(randomX,transform.position.y, randomZ);
         if (Physics.Raycast(walkPoint, -transform.up, 4f, whatIsGround) && !Physics.Raycast(walkPoint, transform.up, 10f, whatIsObstacle))
         {
-            Debug.Log("found point");
+            Debug.Log("found patroling point");
             walkPointSet = true; 
         }
     }
@@ -89,21 +90,59 @@ public class AIStateMachine : MonoBehaviour
     {
         startAttack = false;
     }
+    private void ResetChaseDown()
+    {
+        aiChaseDownPlayer = false;
+    }
 
-    private bool CheckObstacleBetweenPlayers()
+    private bool CheckPointingAtEnemy()
     {
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, Vector3.Normalize(transform.position - player.position) * -sightRange,out hit))
+        if (Physics.Raycast(transform.position, Vector3.Normalize(transform.position - player.position) * -sightRange, out hit))
         {
             Debug.DrawRay(transform.position, Vector3.Normalize(transform.position - player.position) * -hit.distance, Color.red);
             if (hit.collider.gameObject.CompareTag("Player"))
             {
+                //Debug.Log(hit.collider.tag);
                 return true;
             }
-            //Debug.Log("WAll in front");
+        }
+        //Debug.Log("WAll in front");
+        return false;
+    }
+
+    private bool CheckSightField()
+    {
+        Vector3 headingDir = (walkPoint - transform.position).normalized;
+        Vector3 enemyDir = (player.position - transform.position).normalized;
+        if (Vector3.Dot(headingDir, enemyDir) >= 0)         //enemy is in front or perpendicular to ai
+        {
+            //aiChaseDownPlayer = true;
+            return true;
         }
         return false;
     }
+
+   //check if enemy is in sight field => chase AND check if Ai is attacked by player => fight back 
+    private void CheckSpecialCasesPatroling() 
+    {
+        float fixedBulletDetectionSphere = 10f;
+        if (playerInSightRange)
+        {
+            if (Physics.CheckSphere(transform.position, fixedBulletDetectionSphere, whatIsBullet))  // player is shooting at ai
+            {
+                //Debug.Log("AI agressive and Chasing down player");
+                //aiChaseDownPlayer = true;
+                _state = States.Attacking;
+            }
+            if (CheckSightField())      //player can only be chased if visible to ai
+            {
+                walkPointSet = false;
+                _state = States.Chasing;
+            }
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -114,27 +153,22 @@ public class AIStateMachine : MonoBehaviour
         {
             case States.Patroling:
                 Patroling();
-                if (playerInSightRange)
-                {
-                    walkPointSet = false;
-                    _state = States.Chasing;
-                }
+                CheckSpecialCasesPatroling();
                 break;
             case States.Chasing:
                 Chasing();
-                if (playerInAttackRange)
+                if (playerInAttackRange && CheckPointingAtEnemy())  //to attack only if enemy is not behind wall
+                {
+                    //aiChaseDownPlayer = false;
                     _state = States.Attacking;
-                if (!playerInSightRange)
+                    Debug.Log("Changed to attacking");
+                }
+                if (!playerInSightRange && !aiChaseDownPlayer)
                     _state = States.Patroling;
                 break;
             case States.Attacking:
-                if (!CheckObstacleBetweenPlayers())
-                {
-                    _state = States.Chasing;
-                    break;
-                }
                 Attacking();
-                if (!playerInAttackRange)
+                if (!playerInAttackRange || !CheckPointingAtEnemy())
                     _state = States.Chasing;
                 break;
             default:

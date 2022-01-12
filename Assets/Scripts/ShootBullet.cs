@@ -10,9 +10,11 @@ public class ShootBullet : MonoBehaviour
     public PlayerLogic PlayerLogic;
     public GameObject thisplayer;
 
-    [SerializeField] float fireRate = 1f;
+    /*
+    [SerializeField] float fireRate = 2f;
     public AIStateMachine aiScript;
     private float nextAIShootTime;
+    */
     // Start is called before the first frame update
     void Start()
     {
@@ -26,7 +28,7 @@ public class ShootBullet : MonoBehaviour
             }
         }
         PlayerLogic = gameObject.GetComponent<PlayerLogic>();
-        aiScript = FindObjectOfType<AIStateMachine>();
+        //aiScript = FindObjectOfType<AIStateMachine>();
     }
 
     // Update is called once per frame
@@ -37,6 +39,7 @@ public class ShootBullet : MonoBehaviour
             PlayerLogic.Bullets--;
             Shoot();
         }
+        /*
         if (aiScript.startAttack && PlayerLogic.Bullets > 0 && PlayerLogic.isHuman == false) //serialize this
         {
             if (Time.time > nextAIShootTime)
@@ -46,6 +49,7 @@ public class ShootBullet : MonoBehaviour
                 Shoot();
             }
         }
+        */
     }
     private void Shoot()
     {

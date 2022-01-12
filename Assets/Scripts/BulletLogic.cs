@@ -21,7 +21,6 @@ public class BulletLogic : MonoBehaviour
 
     public void Setup(Vector3 dir, GameObject enemy, GameObject _player)
     {
-        //
         transform.eulerAngles = dir;
         this.target = enemy;
         this.bounces = this.maxbounce;
@@ -44,7 +43,7 @@ public class BulletLogic : MonoBehaviour
         {
 
             slowframes++;
-            Debug.Log(slowframes);
+            //Debug.Log(slowframes);
         }
         if(slowframes>=8)
         {
@@ -52,9 +51,8 @@ public class BulletLogic : MonoBehaviour
             
             Destroy(gameObject);
         }
-        lastvelocity = rb.velocity; 
-        
-        
+        lastvelocity = rb.velocity;
+
     }
 
     //Regocnizes what the bullet did hit and starts appropiate response

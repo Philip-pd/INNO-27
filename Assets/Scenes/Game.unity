@@ -354,6 +354,8 @@ MonoBehaviour:
   playerInAttackRange: 0
   playerLogic: {fileID: 0}
   startAttack: 0
+  pfBullet: {fileID: 3640516005282372536, guid: 404c82bfdb2580f4384d7754135066f0, type: 3}
+  Enemy: {fileID: 2121423392}
 --- !u!195 &149279761
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1225,7 +1227,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8277770511304128875, guid: 7b893e3017781dd42a3e28b7a4790ded, type: 3}
       propertyPath: m_Layer
-      value: 7
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8277770511304128877, guid: 7b893e3017781dd42a3e28b7a4790ded, type: 3}
       propertyPath: m_TranslationAtRest.x
@@ -3032,8 +3034,6 @@ MonoBehaviour:
   Enemy: {fileID: 0}
   PlayerLogic: {fileID: 0}
   thisplayer: {fileID: 0}
-  fireRate: 1
-  aiScript: {fileID: 0}
 --- !u!114 &1599762080
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3871,6 +3871,11 @@ Transform:
   m_Father: {fileID: 952611796}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2121423392 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8277770511304128875, guid: 7b893e3017781dd42a3e28b7a4790ded, type: 3}
+  m_PrefabInstance: {fileID: 8277770510991987393}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2145926774
 GameObject:
   m_ObjectHideFlags: 0

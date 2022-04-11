@@ -12,6 +12,7 @@ public class PlayerLogic : MonoBehaviour
     public int Bullets { get; set; }
     public HealthBar _healthbar;
     public GameObject endScreen;
+    private StayOnWinField winField;
 
 
     // Start is called before the first frame update
@@ -20,6 +21,8 @@ public class PlayerLogic : MonoBehaviour
         this.Bullets = 3;
         if(_healthbar)
             _healthbar.setMaxHealth(HP);
+
+        winField = GameObject.Find("WinField").GetComponent<StayOnWinField>();
     }
 
     // Update is called once per frame
@@ -44,7 +47,16 @@ public class PlayerLogic : MonoBehaviour
     {
         HP -= 20;
         if(_healthbar)
+        {
             _healthbar.SetHealth(HP);
+
+            if(this.tag == "Player")
+                winField.playerTimer = 0;
+
+            if (this.tag == "Enemy")
+                winField.enemyTimer = 0;
+        }
+            
         Debug.Log("HP:" + HP);
         if (HP <= 0)
         {
@@ -52,4 +64,6 @@ public class PlayerLogic : MonoBehaviour
             endScreen.gameObject.SetActive(true);
         }
     }
+
+   
 }

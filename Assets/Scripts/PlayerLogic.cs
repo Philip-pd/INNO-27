@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerLogic : MonoBehaviour
 {
@@ -10,7 +11,6 @@ public class PlayerLogic : MonoBehaviour
     public bool isHuman = false;
     public int maxbullets;
     float rechargepercent; //Add same thing for shooting cooldown should roughly be able to shoot once every 1-2 second(s) and get a new shot every 3-5
-    int CD;
     public int Bullets { get; set; }
     public HealthBar _healthbar;
     public GameObject endScreen;
@@ -32,7 +32,7 @@ public class PlayerLogic : MonoBehaviour
 
         if (this.Bullets < maxbullets)
         {
-            rechargepercent += RechargeRate;
+            rechargepercent += RechargeRate*Time.deltaTime;
         }
         else { rechargepercent = 0; }
         if (rechargepercent >= 100)

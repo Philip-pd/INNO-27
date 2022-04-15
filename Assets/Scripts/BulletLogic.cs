@@ -30,30 +30,10 @@ public class BulletLogic : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        rb.AddForce(player.transform.forward * .0002f);
+        rb.AddForce(player.transform.forward * .0002f*speed);//weird
     }
 
-    //Needed for bounce function
-    void Update()
-    {
-        
-       
-            var speed = rb.velocity.magnitude;
-        if (speed <= 20)
-        {
 
-            slowframes++;
-            //Debug.Log(slowframes);
-        }
-        if(slowframes>=8)
-        {
-
-            
-            Destroy(gameObject);
-        }
-        lastvelocity = rb.velocity;
-
-    }
 
     //Regocnizes what the bullet did hit and starts appropiate response
     private void OnCollisionEnter(Collision collision)

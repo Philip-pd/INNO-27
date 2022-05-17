@@ -7,6 +7,7 @@ TagManager:
   - HealingPack
   - WinField
   - Enemy
+  - Bullet
   layers:
   - Default
   - TransparentFX

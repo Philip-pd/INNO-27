@@ -25,7 +25,7 @@ public class AIStateMachine : MonoBehaviour
     [SerializeField]private float timeBetweenAttack;
 
     [SerializeField] private float sightRange, attackRange, healingpackrange;
-    private bool playerInSightRange, playerInAttackRange,healingpackInSightRange;
+    private bool playerInSightRange, playerInAttackRange,healingpackInSightRange,evading;
 
     public PlayerLogic playerLogic;
     private bool startAttack = false;
@@ -33,6 +33,8 @@ public class AIStateMachine : MonoBehaviour
     private GameObject _enemy;
     private bool aiChaseDownPlayer = false;
     private GameObject aimassist;
+    private float? time;
+    private Vector3 evade;
 
     private void Awake()
     {
@@ -65,7 +67,6 @@ public class AIStateMachine : MonoBehaviour
         walkPoint = new Vector3(randomX,transform.position.y, randomZ);
         if (Physics.Raycast(walkPoint, -transform.up, 4f, whatIsGround) && !Physics.Raycast(walkPoint, transform.up, 10f, whatIsObstacle))
         {
-            Debug.Log("found patroling point");
             walkPointSet = true; 
         }
     }
@@ -97,17 +98,6 @@ public class AIStateMachine : MonoBehaviour
                 Invoke(nameof(ResetAttack), timeBetweenAttack);
             }
         }
-    }
-
-    private void Evading()
-    {
-        Vector2 dir = new Vector2(1f, 0f);
-        //Transform bulletTransform = Instantiate(pfBullet, gameObject.transform.position + gameObject.transform.forward * 1.5f, Quaternion.identity);
-        //bulletTransform.GetComponent<BulletLogic>().Setup(dir, _enemy, gameObject);
-        //Todo: change Point 
-        //dir=Vector2.MoveTowards(transform.position, )
-        agent.SetDestination(dir);
-
     }
     private Vector3 PredictPoint(Vector3 PC, float SC, Vector3 PR, Vector3 VR)
     {
@@ -183,29 +173,18 @@ public class AIStateMachine : MonoBehaviour
         {
             if (Physics.CheckSphere(transform.position, fixedBulletDetectionSphere, whatIsBullet))  // player is shooting at ai
             {
+                Debug.Log("Attacking me");
                 //Debug.Log("AI agressive and Chasing down player");
                 //aiChaseDownPlayer = true;
+
+
                 _state = States.Attacking;
             }
             if (CheckSightField())      //player can only be chased if visible to ai
             {
                 walkPointSet = false;
                 _state = States.Chasing;
-            }
-            
-            Vector3 headingDir = (walkPoint - transform.position).normalized;
-            GameObject Target = FindInActiveObjectByLayer(LayerMask.NameToLayer("Bullet"));
-            if(Target != null)
-            {
-                Vector3 bulletDir = (Target.transform.position - transform.position).normalized;
-                //TODO: Check for a Bullet in range
-                if (Vector3.Dot(headingDir, bulletDir) > 0)
-                {
-                    //Debug.Log("Awaiding");
-                    //_state = States.Evading;
-                }
-            }
-                
+            }  
         }
     }
     GameObject FindInActiveObjectByLayer(int layer)
@@ -225,40 +204,55 @@ public class AIStateMachine : MonoBehaviour
         return null;
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Bullet")
+        {
+            evading = true;
+            time = Time.time + 1;
+            
+            evade = other.gameObject.transform.position * -1; //TODO: BEtter
+            Debug.Log(evade);
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
         playerInSightRange = Physics.CheckSphere(transform.position,sightRange,whatIsPlayer);
         playerInAttackRange = Physics.CheckSphere(transform.position,attackRange,whatIsPlayer);
         healingpackInSightRange = Physics.CheckSphere(transform.position,healingpackrange,whatIsHealingPack);
-        switch (_state)
+        if (time>Time.time)
         {
-            case States.Patroling:
-                Patroling();
-                CheckSpecialCasesPatroling();
-                break;
-            case States.Chasing:
-                Chasing();
-                if (playerInAttackRange && CheckPointingAtEnemy())  //to attack only if enemy is not behind wall
-                {
-                    //aiChaseDownPlayer = false;
-                    _state = States.Attacking;
-                    Debug.Log("Changed to attacking");
-                }
-                if (!playerInSightRange && !aiChaseDownPlayer)
-                    _state = States.Patroling;
-                break;
-            case States.Attacking:
-                Attacking();
-                if (!playerInAttackRange || !CheckPointingAtEnemy())
-                    _state = States.Chasing;
-                break;
-            case States.Evading:
-                Evading();
-                //TODO: ???
-                break;
-            default:
-                break;
+            //TODO: 
+            agent.SetDestination(evade);
+        }
+        else
+        {
+            switch (_state)
+            {
+                case States.Patroling:
+                    Patroling();
+                    CheckSpecialCasesPatroling();
+                    break;
+                case States.Chasing:
+                    Chasing();
+                    if (playerInAttackRange && CheckPointingAtEnemy())  //to attack only if enemy is not behind wall
+                    {
+                        //aiChaseDownPlayer = false;
+                        _state = States.Attacking;
+                    }
+                    if (!playerInSightRange && !aiChaseDownPlayer)
+                        _state = States.Patroling;
+                    break;
+                case States.Attacking:
+                    Attacking();
+                    if (!playerInAttackRange || !CheckPointingAtEnemy())
+                        _state = States.Chasing;
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

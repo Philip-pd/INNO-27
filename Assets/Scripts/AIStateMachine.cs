@@ -10,7 +10,8 @@ public class AIStateMachine : MonoBehaviour
     {
         Patroling,
         Chasing,
-        Attacking
+        Attacking,
+        Evading
     }
     private States _state;
     public NavMeshAgent agent;
@@ -86,6 +87,17 @@ public class AIStateMachine : MonoBehaviour
         }
     }
 
+    private void Evading()
+    {
+        Vector2 dir = new Vector2(1f, 0f);
+        //Transform bulletTransform = Instantiate(pfBullet, gameObject.transform.position + gameObject.transform.forward * 1.5f, Quaternion.identity);
+        //bulletTransform.GetComponent<BulletLogic>().Setup(dir, _enemy, gameObject);
+        //Todo: change Point 
+        //dir=Vector2.MoveTowards(transform.position, )
+        agent.SetDestination(dir);
+
+    }
+
     private void ResetAttack()
     {
         startAttack = false;
@@ -140,7 +152,37 @@ public class AIStateMachine : MonoBehaviour
                 walkPointSet = false;
                 _state = States.Chasing;
             }
+            
+            Vector3 headingDir = (walkPoint - transform.position).normalized;
+            GameObject Target = FindInActiveObjectByLayer(LayerMask.NameToLayer("Bullet"));
+            if(Target != null)
+            {
+                Vector3 bulletDir = (Target.transform.position - transform.position).normalized;
+                //TODO: Check for a Bullet in range
+                if (Vector3.Dot(headingDir, bulletDir) > 0)
+                {
+                    //Debug.Log("Awaiding");
+                    //_state = States.Evading;
+                }
+            }
+                
         }
+    }
+    GameObject FindInActiveObjectByLayer(int layer)
+    {
+
+        Transform[] objs = Resources.FindObjectsOfTypeAll<Transform>() as Transform[];
+        for (int i = 0; i < objs.Length; i++)
+        {
+            if (objs[i].hideFlags == HideFlags.None)
+            {
+                if (objs[i].gameObject.layer == layer)
+                {
+                    return objs[i].gameObject;
+                }
+            }
+        }
+        return null;
     }
 
     // Update is called once per frame
@@ -170,6 +212,10 @@ public class AIStateMachine : MonoBehaviour
                 Attacking();
                 if (!playerInAttackRange || !CheckPointingAtEnemy())
                     _state = States.Chasing;
+                break;
+            case States.Evading:
+                Evading();
+                //TODO: ???
                 break;
             default:
                 break;

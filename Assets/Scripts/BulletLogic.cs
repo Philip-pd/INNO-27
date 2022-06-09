@@ -33,6 +33,10 @@ public class BulletLogic : MonoBehaviour
         rb.AddForce(player.transform.forward * .0002f*speed);//weird
     }
 
+    void Update()
+    {
+        lastvelocity = rb.velocity;
+    }
 
 
     //Regocnizes what the bullet did hit and starts appropiate response

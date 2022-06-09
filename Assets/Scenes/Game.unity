@@ -353,12 +353,12 @@ MonoBehaviour:
     m_Bits: 256
   whatIsHealingPack:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1024
   walkPointRange: 20
   timeBetweenAttack: 1
   sightRange: 30
-  attackRange: 15
-  healingpackrange: 0
+  attackRange: 0
+  healingpackrange: 15
   playerLogic: {fileID: 0}
   pfBullet: {fileID: 3640516005282372536, guid: 404c82bfdb2580f4384d7754135066f0, type: 3}
 --- !u!195 &149279761
@@ -4249,6 +4249,10 @@ PrefabInstance:
     - target: {fileID: 1379090035072620702, guid: 9080cdf4e34deee499a0c012db5a26a7, type: 3}
       propertyPath: m_Name
       value: WinField
+      objectReference: {fileID: 0}
+    - target: {fileID: 1379090035072620702, guid: 9080cdf4e34deee499a0c012db5a26a7, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1379090035072620703, guid: 9080cdf4e34deee499a0c012db5a26a7, type: 3}
       propertyPath: winScreen

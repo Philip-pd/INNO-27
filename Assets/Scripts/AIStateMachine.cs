@@ -48,13 +48,22 @@ public class AIStateMachine : MonoBehaviour
 
     private void Patroling()
     {
-        if (!walkPointSet)
-            SearchWalkPoint();
-        if (walkPointSet)
-            agent.SetDestination(walkPoint);
-        Vector3 distanceToWalkPoint = transform.position - walkPoint;
-        if (distanceToWalkPoint.magnitude < 3f)
-            walkPointSet = false;
+        GameObject closesthealingpack = null;
+        if (healingpackInSightRange)
+        {
+            closesthealingpack = FindClosestHealingPack();
+            agent.SetDestination(closesthealingpack.transform.position);
+        }
+        else
+        {
+            if (!walkPointSet)
+                SearchWalkPoint();
+            if (walkPointSet)
+                agent.SetDestination(walkPoint);
+            Vector3 distanceToWalkPoint = transform.position - walkPoint;
+            if (distanceToWalkPoint.magnitude < 3f)
+                walkPointSet = false;
+        }
     }
 
     private void SearchWalkPoint()
@@ -73,18 +82,66 @@ public class AIStateMachine : MonoBehaviour
 
     private void Chasing()
     {
-        agent.SetDestination(player.position);
+        GameObject closesthealingpack = null;
+        if (healingpackInSightRange)
+        {
+            closesthealingpack = FindClosestHealingPack();
+            Vector3 distancepack = closesthealingpack.transform.position - transform.position;
+            Vector3 distanceenemy = player.position - transform.position;
+            float distancepackF = distancepack.sqrMagnitude;
+            float distanceenemyF = distanceenemy.sqrMagnitude;
+            if (distancepackF < distanceenemyF)
+            {
+                agent.SetDestination(closesthealingpack.transform.position);
+            }
+            else
+            {
+                agent.SetDestination(player.position);
+            }
+
+        }
+        else
+        {
+            agent.SetDestination(player.position);
+        }
     }
 
     private void Attacking()
     {
+
+        //agent.SetDestination(transform.position);
+        //transform.LookAt(player);
+
         Rigidbody rb = player.GetComponentInChildren<Rigidbody>();
-        agent.SetDestination(transform.position);
-        transform.LookAt(player);
         Vector3 cleanedvelocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
         Vector3 predictedposition = PredictPoint(transform.position, 65f, player.position, cleanedvelocity);
-        agent.SetDestination(predictedposition);
-        transform.LookAt(predictedposition);
+
+        GameObject closesthealingpack = null;
+        if (healingpackInSightRange)
+        {
+            closesthealingpack = FindClosestHealingPack();
+            Vector3 distancepack = closesthealingpack.transform.position - transform.position;
+            Vector3 distanceenemy = player.position - transform.position;
+            float distancepackF = distancepack.sqrMagnitude;
+            float distanceenemyF = distanceenemy.sqrMagnitude;
+            if (distancepackF < distanceenemyF)
+            {
+                agent.SetDestination(closesthealingpack.transform.position);
+                transform.LookAt(predictedposition);
+            }
+            else
+            {
+                agent.SetDestination(predictedposition);
+                transform.LookAt(predictedposition);
+            }
+
+        }
+        else
+        {
+            agent.SetDestination(player.position);
+        }
+
+
         if (predictedposition != new Vector3(123, 456, 789))
         {
             aimassist.transform.position = predictedposition;
@@ -254,5 +311,25 @@ public class AIStateMachine : MonoBehaviour
                     break;
             }
         }
+    }
+
+    public GameObject FindClosestHealingPack()
+    {
+        GameObject[] gos;
+        gos = GameObject.FindGameObjectsWithTag("HealingPack");
+        GameObject closest = null;
+        float distance = Mathf.Infinity;
+        Vector3 position = transform.position;
+        foreach (GameObject go in gos)
+        {
+            Vector3 diff = go.transform.position - position;
+            float curDistance = diff.sqrMagnitude;
+            if (curDistance < distance)
+            {
+                closest = go;
+                distance = curDistance;
+            }
+        }
+        return closest;
     }
 }

@@ -12,8 +12,7 @@ public class HealingPack : MonoBehaviour
     void Start()
     {
         players = GameObject.FindGameObjectsWithTag("Player");
-        lifetime = 10;
-        ScaleToTarget(new Vector3(0.2f, 0.2f, 0.2f), 10f);
+        ScaleToTarget(new Vector3(0.2f, 0.2f, 0.2f), lifetime);
     }
 
     // Update is called once per frame

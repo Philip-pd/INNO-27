@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6962325386408067599}
   - component: {fileID: 6962325386408067596}
   - component: {fileID: 6962325386408067597}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cube (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -92,7 +92,7 @@ GameObject:
   - component: {fileID: 6962325386449360598}
   - component: {fileID: 6962325386449360599}
   - component: {fileID: 6962325386449360597}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: HealingPack
   m_TagString: HealingPack
   m_Icon: {fileID: 0}
@@ -142,7 +142,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerLogic: {fileID: 0}
   players: []
-  lifetime: 0
+  lifetime: 100000
 --- !u!1 &6962325387082838371
 GameObject:
   m_ObjectHideFlags: 0
@@ -154,7 +154,7 @@ GameObject:
   - component: {fileID: 6962325387082838370}
   - component: {fileID: 6962325387082838375}
   - component: {fileID: 6962325387082838368}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cube (9)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

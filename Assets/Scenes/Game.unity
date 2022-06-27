@@ -357,7 +357,7 @@ MonoBehaviour:
   walkPointRange: 20
   timeBetweenAttack: 1
   sightRange: 30
-  attackRange: 0
+  attackRange: 30
   healingpackrange: 15
   playerLogic: {fileID: 0}
   pfBullet: {fileID: 3640516005282372536, guid: 404c82bfdb2580f4384d7754135066f0, type: 3}
@@ -383,6 +383,17 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &149279766 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8277770511304128879, guid: 7b893e3017781dd42a3e28b7a4790ded, type: 3}
+  m_PrefabInstance: {fileID: 623031340}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 149279759}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e4469bf20313b240a4e03c3e5aa51fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &182164682
 GameObject:
   m_ObjectHideFlags: 0
@@ -1512,6 +1523,10 @@ PrefabInstance:
       propertyPath: m_TranslationOffset.z
       value: 19.875
       objectReference: {fileID: 0}
+    - target: {fileID: 8277770511304128874, guid: 7b893e3017781dd42a3e28b7a4790ded, type: 3}
+      propertyPath: _opponent
+      value: 
+      objectReference: {fileID: 2119963922}
     - target: {fileID: 8277770511304128875, guid: 7b893e3017781dd42a3e28b7a4790ded, type: 3}
       propertyPath: m_Name
       value: AI
@@ -1522,8 +1537,20 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8277770511304128875, guid: 7b893e3017781dd42a3e28b7a4790ded, type: 3}
       propertyPath: m_TagString
-      value: Player
+      value: Enemy
       objectReference: {fileID: 0}
+    - target: {fileID: 8277770511304128876, guid: 7b893e3017781dd42a3e28b7a4790ded, type: 3}
+      propertyPath: Enemy
+      value: 
+      objectReference: {fileID: 2119963918}
+    - target: {fileID: 8277770511304128876, guid: 7b893e3017781dd42a3e28b7a4790ded, type: 3}
+      propertyPath: thisplayer
+      value: 
+      objectReference: {fileID: 149279759}
+    - target: {fileID: 8277770511304128876, guid: 7b893e3017781dd42a3e28b7a4790ded, type: 3}
+      propertyPath: PlayerLogic
+      value: 
+      objectReference: {fileID: 149279766}
     - target: {fileID: 8277770511304128877, guid: 7b893e3017781dd42a3e28b7a4790ded, type: 3}
       propertyPath: m_TranslationAtRest.x
       value: -4.84
@@ -4206,7 +4233,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2119963918}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7736ac78201975742b3c59967c04b646, type: 3}
+  m_Script: {fileID: 0}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &2145926774
@@ -4331,6 +4358,10 @@ PrefabInstance:
       propertyPath: m_UseGravity
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8277770511304128874, guid: 7b893e3017781dd42a3e28b7a4790ded, type: 3}
+      propertyPath: _opponent
+      value: 
+      objectReference: {fileID: 149279766}
     - target: {fileID: 8277770511304128875, guid: 7b893e3017781dd42a3e28b7a4790ded, type: 3}
       propertyPath: m_Name
       value: Player
@@ -4339,6 +4370,18 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 8277770511304128876, guid: 7b893e3017781dd42a3e28b7a4790ded, type: 3}
+      propertyPath: Enemy
+      value: 
+      objectReference: {fileID: 149279759}
+    - target: {fileID: 8277770511304128876, guid: 7b893e3017781dd42a3e28b7a4790ded, type: 3}
+      propertyPath: thisplayer
+      value: 
+      objectReference: {fileID: 2119963918}
+    - target: {fileID: 8277770511304128876, guid: 7b893e3017781dd42a3e28b7a4790ded, type: 3}
+      propertyPath: PlayerLogic
+      value: 
+      objectReference: {fileID: 2119963922}
     - target: {fileID: 8277770511304128877, guid: 7b893e3017781dd42a3e28b7a4790ded, type: 3}
       propertyPath: m_TranslationAtRest.x
       value: 0

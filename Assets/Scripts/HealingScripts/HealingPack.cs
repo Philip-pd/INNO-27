@@ -6,12 +6,14 @@ public class HealingPack : MonoBehaviour
 {       
     public PlayerLogic playerLogic;
     public GameObject[] players;
+    public GameObject[] enemies;
     public float lifetime;
 
     // Start is called before the first frame update
     void Start()
     {
         players = GameObject.FindGameObjectsWithTag("Player");
+        enemies = GameObject.FindGameObjectsWithTag("Enemy");
         ScaleToTarget(new Vector3(0.2f, 0.2f, 0.2f), lifetime);
     }
 
@@ -36,7 +38,7 @@ public class HealingPack : MonoBehaviour
             players[0].GetComponent<PlayerLogic>().HP = i;
             Destroy(gameObject);
         }
-        else if (other.gameObject == players[1])
+        else if (other.gameObject == enemies[0])
         {
             Debug.Log("testb");
             i = players[1].GetComponent<PlayerLogic>().HP + 50;
